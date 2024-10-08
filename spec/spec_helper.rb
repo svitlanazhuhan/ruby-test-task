@@ -9,9 +9,16 @@ require_relative 'support/api_client'
 require_relative 'support/combobox'
 require_relative 'support/pages/home_page'
 
-# Register Chrome with Selenium
+# Register Chrome with Selenium, in headless mode for CI
 Capybara.register_driver :selenium do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
+  options = Selenium::WebDriver::Chrome::Options.new
+  options.add_argument('--headless') unless ENV['HEADLESS'] == 'false'  # Use headless mode unless explicitly disabled
+  options.add_argument('--disable-gpu')
+  options.add_argument('--window-size=1280,800')
+  options.add_argument('--no-sandbox') # CI environments may need this
+  options.add_argument('--disable-dev-shm-usage') # Required in some CI environments
+
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
 end
 
 # Set Capybara default driver
