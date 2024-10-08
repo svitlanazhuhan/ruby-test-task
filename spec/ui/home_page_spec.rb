@@ -20,7 +20,7 @@ RSpec.describe 'Air Canada Homepage', type: :feature do
     expect(page).to have_field 'Password'
   end
 
-  it 'searches for a flight' do
+  it 'searches for flight' do
     departure_date = Date.today + 7
     return_date = Date.today + 8
     @home_page.search_flight(
